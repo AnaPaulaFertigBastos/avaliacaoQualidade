@@ -13,7 +13,6 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('descricao');
             $table->boolean('ativo')->default(true);
-            $table->timestamps();
         });
 
         // dispositivos
@@ -21,7 +20,6 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('nome');
             $table->boolean('status')->default(true);
-            $table->timestamps();
         });
 
         // perguntas
@@ -30,7 +28,6 @@ return new class extends Migration
             $table->text('texto');
             $table->boolean('status')->default(true);
             $table->boolean('resposta_numerica')->default(true);
-            $table->timestamps();
         });
 
         // avaliacoes
