@@ -15,6 +15,7 @@ class AvaliacaoController extends Controller
     {
         $questions = Pergunta::where('status', true)->get();
         $devices = Dispositivo::where('status', true)->get();
+        
         // reuso das views existentes: 'evaluation.index'
         return view('evaluation.index', ['questions' => $questions, 'devices' => $devices]);
     }
