@@ -51,22 +51,22 @@ document.addEventListener('DOMContentLoaded', function(){
     });
 
     // on submit, ensure all questions answered
-    form.addEventListener('submit', function(e){
-        for(const q of questions){
-            const radios = q.querySelectorAll('input[type="radio"]');
-            let ok = false;
-            for(const r of radios){ if(r.checked){ ok = true; break; } }
-            if(!ok){
-                e.preventDefault();
-                alert('Por favor responda todas as perguntas antes de enviar.');
-                // show the unanswered question
-                const idx = questions.indexOf(q);
-                index = idx;
-                showIndex(index);
-                return false;
-            }
-        }
-    });
+    // form.addEventListener('submit', function(e){
+    //     for(const q of questions){
+    //         const radios = q.querySelectorAll('input[type="radio"]');
+    //         let ok = false;
+    //         for(const r of radios){ if(r.checked){ ok = true; break; } }
+    //         if(!ok){
+    //             e.preventDefault();
+    //             alert('Por favor responda todas as perguntas antes de enviar.');
+    //             // show the unanswered question
+    //             const idx = questions.indexOf(q);
+    //             index = idx;
+    //             showIndex(index);
+    //             return false;
+    //         }
+    //     }
+    // });
 
     // add a border on selected inputs
     document.querySelectorAll('.scale-label').forEach(lbl => {

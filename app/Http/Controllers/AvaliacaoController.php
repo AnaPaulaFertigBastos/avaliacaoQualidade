@@ -8,6 +8,8 @@ use App\Models\Setor;
 use App\Models\Avaliacao;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class AvaliacaoController extends Controller
 {
@@ -63,30 +65,104 @@ class AvaliacaoController extends Controller
     // armazena respostas (uma avaliação gera várias linhas, uma por pergunta)
     public function store(Request $request)
     {
+        // validação de forma declarativa primeiro
         $data = $request->validate([
             'device_id' => 'required|string|exists:dispositivos,id',
             'responses' => 'required|array',
-            'responses.*' => 'required|integer|min:0|max:10',
-            'feedback' => 'nullable|string|max:2000',
+            // 'responses.*' => 'required',
             'setor_id' => 'nullable|string|exists:setores,id',
         ]);
 
-        $deviceId = $data['device_id'];
-        $feedback = $data['feedback'] ?? null;
-        $setorId = $data['setor_id'] ?? null;
+        // sanitização básica: trim dos ids
+        $deviceId = is_string($data['device_id']) ? trim($data['device_id']) : $data['device_id'];
+        $setorId = isset($data['setor_id']) && is_string($data['setor_id']) ? trim($data['setor_id']) : ($data['setor_id'] ?? null);
 
-        foreach ($data['responses'] as $questionId => $response) {
-            Avaliacao::create([
-                'id' => Str::uuid()->toString(),
-                'setor_id' => $setorId,
-                'pergunta_id' => $questionId,
-                'dispositivo_id' => $deviceId,
-                'resposta' => $response,
-                'feedback_textual' => $feedback,
-                'data' => now(),
-            ]);
+        // checagens extras (validation 'exists' cobre a maior parte, mas verificamos antes de gravar)
+        $device = Dispositivo::find($deviceId);
+        if (! $device) {
+            return back()->withErrors(['device_id' => 'Dispositivo informado não encontrado.'])->withInput();
         }
 
-        return view('evaluation.thankyou');
+        if ($setorId) {
+            $setor = Setor::find($setorId);
+            if (! $setor) {
+                return back()->withErrors(['setor_id' => 'Setor informado não encontrado.'])->withInput();
+            }
+        }
+
+        // usar transação para garantir atomicidade
+        DB::beginTransaction();
+        try {
+            if (empty($data['responses'])) {
+                return back()->withErrors(['responses' => 'Nenhuma resposta fornecida.'])->withInput();
+            }
+
+            foreach ($data['responses'] as $questionId => $response) {
+                // sanitize question id (trim) and response
+                $questionIdSan = is_string($questionId) ? trim($questionId) : $questionId;
+
+                $question = Pergunta::find($questionIdSan);
+                if (! $question) {
+                    DB::rollBack();
+                    return back()->withErrors(['responses' => "Pergunta com ID '{$questionIdSan}' não encontrada."])->withInput();
+                }
+
+                if ($question->resposta_numerica == false) {
+                    // texto livre: sanitizar e limitar tamanho
+                    $feedback = is_scalar($response) ? trim(strip_tags((string) $response)) : null;
+
+                    if ($feedback === null || trim($feedback) === '') {
+                        continue; // pular avaliação sem feedback
+                    }
+
+                    if ($feedback !== null) {
+                        if (strlen($feedback) > 2000) {     
+                            DB::rollBack();
+                            return back()->withErrors(['responses' => "Feedback para a pergunta '{$question->texto}' é muito longo."])->withInput();
+                        }
+                    }
+                    $respostaNumerica = null;
+                } else {
+                    // numérico: garantir que é número entre 0 e 10
+
+                    if ($response === null) {
+                        continue; // pular avaliação sem resposta
+                    }
+                    if (! is_numeric($response)) {
+                        DB::rollBack();
+                        return back()->withErrors(['responses' => "Resposta para a pergunta '{$question->texto}' deve ser numérica."])->withInput();
+                    }
+
+                    $respostaNumerica = (int) $response;
+                    if ($respostaNumerica < 0 || $respostaNumerica > 10) {
+                        DB::rollBack();
+                        return back()->withErrors(['responses' => "Resposta para a pergunta '{$question->texto}' deve ser entre 0 e 10."])->withInput();
+                    }
+                    $feedback = null;
+                }
+
+                Avaliacao::create([
+                    'id' => Str::uuid()->toString(),
+                    'setor_id' => $setorId,
+                    'pergunta_id' => $questionIdSan,
+                    'dispositivo_id' => $deviceId,
+                    'resposta' => $respostaNumerica,
+                    'feedback_textual' => $feedback,
+                    'data' => now(),
+                ]);
+            }
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Erro salvando avaliações: ' . $e->getMessage(), ['exception' => $e]);
+            return back()->withErrors(['general' => 'Erro ao salvar avaliações. Tente novamente mais tarde.' . $e->getMessage(), ['exception' => $e]])->withInput();
+        }
+
+        // Sucesso: mostrar página de agradecimento e repassar setor/dispositivo usados
+        return view('evaluation.thankyou', [
+            'setorId' => $setorId,
+            'deviceId' => $deviceId,
+        ]);
     }
 }

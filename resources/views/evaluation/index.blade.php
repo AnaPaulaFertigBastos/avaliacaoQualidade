@@ -15,27 +15,30 @@
         @if($selectedDeviceId == null || $selectedSetorId == null)
             <p>Insira, na URL, um Setor e Dispositivo válidos para prosseguir com a avaliação, respectivamente.</p>
         @else
+            {{-- exibe erros de validação, se houver --}}
+            @if($errors->any())
+                <div class="errors" style="color:#b00; margin-bottom:1rem;">
+                    <ul>
+                        @foreach($errors->all() as $err)
+                            <li>{{ $err }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
             <p class="subtitle">Por favor, avalie de 0 (MUITO INSATISFEITO) a 10 (COMPLETAMENTE SATISFEITO).</p>
             <form method="POST" action="{{ route('evaluation.store') }}" id="evalForm">
                 @csrf
 
                 <div class="form-row">
                     
-                    <!-- <label for="device_id">Dispositivo / Setor: {{$selectedSetorId}}</label>
-                    @if(!empty($selectedDeviceId))
-                        <input type="hidden" name="device_id" value="{{ $selectedDeviceId }}">
-                        <p><strong>Dispositivo:</strong> {{ $selectedDeviceName ?? '—' }}</p>
-                    @else
-                        <select name="device_id" id="device_id" required>
-                            <option value="">-- selecione --</option>
-                            @foreach($devices as $d)
-                                <option value="{{ $d->id }}">{{ $d->nome }}</option>
-                            @endforeach
-                        </select>
-                    @endif -->
+                   
 
                     @if(!empty($selectedSetorId))
                         <input type="hidden" name="setor_id" value="{{ $selectedSetorId }}">
+                    @endif
+
+                    @if(!empty($selectedDeviceId))
+                        <input type="hidden" name="device_id" value="{{ $selectedDeviceId }}">
                     @endif
                 </div>
 
@@ -50,7 +53,7 @@
                                 @if ($q->resposta_numerica == false)
                                     <div class="feedback-row">
                                         <label for="feedback">Feedback adicional (opcional)</label><br>
-                                        <textarea name="feedback" id="feedback" rows="4" style="width:100%"></textarea>
+                                        <textarea name="responses[{{ $q->id }}]" id="feedback" rows="4" style="width:100%"></textarea>
                                     </div>
                                 @else
                                     <div class="scale" style="">

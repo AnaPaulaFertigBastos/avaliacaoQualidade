@@ -36,7 +36,7 @@ return new class extends Migration
             $table->uuid('setor_id');
             $table->uuid('pergunta_id');
             $table->uuid('dispositivo_id');
-            $table->integer('resposta');
+            $table->integer('resposta')->nullable();
             $table->string('feedback_textual')->nullable();
             $table->timestampTz('data')->useCurrent();
 

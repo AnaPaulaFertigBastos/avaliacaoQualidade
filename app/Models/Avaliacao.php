@@ -11,6 +11,10 @@ class Avaliacao extends Model
 
     public $incrementing = false;
     protected $keyType = 'string';
+    /**
+     * Nome correto da tabela no banco (plural em português).
+     */
+    protected $table = 'avaliacoes';
 
     public $timestamps = false; // using 'data' timestampTz instead
 
