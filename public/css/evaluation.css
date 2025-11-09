@@ -23,6 +23,8 @@ footer {
   /* height: 100%; */
   align-items: center;
   max-height: 492px;
+  max-width: 794px;
+  width: 100%;
 }
 
 .evaluation-card{
@@ -103,6 +105,10 @@ footer {
   margin-right:6px
 }
 
+.scale-label.selected span{
+  border:0.5px solid #000;
+}
+
 .scale-value {
   display: inline-block;
   width: 40px;
@@ -147,6 +153,19 @@ footer {
   margin-top:18px
 }
 
+
+@media(max-width:830px) {
+  .card {
+    max-height: 700px;
+    width:80%; 
+  }
+
+  .evaluation-card{
+    max-width:650px;
+
+  }
+}
+
 @media (max-width:600px) {
   .scale-label{
     width:34px;
@@ -154,8 +173,6 @@ footer {
     font-size:0.9rem
   }
 
-  .card {
-    max-height: 700px;
-    height: 100%;
-  }
+  
 }
+

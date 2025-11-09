@@ -68,6 +68,37 @@ document.addEventListener('DOMContentLoaded', function(){
         }
     });
 
+    // add a border on selected inputs
+    document.querySelectorAll('.scale-label').forEach(lbl => {
+        lbl.addEventListener('click', function(e){
+            // find the input inside this label
+            const input = lbl.querySelector('input[type="radio"]');
+            if(!input) return;
+
+            // unselect siblings
+            const container = lbl.closest('.scale');
+            if(container){
+                container.querySelectorAll('.scale-label').forEach(sib => sib.classList.remove('selected'));
+            }
+
+            // select this one
+            input.checked = true;
+            lbl.classList.add('selected');
+
+            // trigger change for any other listeners
+            input.dispatchEvent(new Event('change', { bubbles: true }));
+        });
+
+        // keyboard accessibility
+        lbl.setAttribute('tabindex', '0');
+        lbl.addEventListener('keydown', function(e){
+            if(e.key === 'Enter' || e.key === ' '){
+                e.preventDefault();
+                lbl.click();
+            }
+        });
+    });
+
     // initialize
     showIndex(index);
 });
