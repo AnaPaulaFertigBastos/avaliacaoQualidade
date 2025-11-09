@@ -11,6 +11,11 @@ class Setor extends Model
 
     public $incrementing = false;
     protected $keyType = 'string';
+    /**
+     * Nome da tabela no banco (plural em português).
+     * Eloquent por padrão tentaria "setors" e causaria erro com PostgreSQL.
+     */
+    protected $table = 'setores';
 
     protected $fillable = ['id', 'descricao', 'ativo'];
 

@@ -9,6 +9,10 @@ Route::get('/', function () {
     return app(AvaliacaoController::class)->index();
 });
 
+// route that accepts setor and dispositivo ids (UUIDs) — both optional
+// allows: /avaliacao, /avaliacao/{setorId}, /avaliacao/{setorId}/{dispositivoId}
+Route::get('/avaliacao/{setorId?}/{dispositivoId?}', [AvaliacaoController::class, 'index'])->name('evaluation.form');
+
 // Submit evaluation
 Route::post('/evaluate', [AvaliacaoController::class, 'store'])->name('evaluation.store');
 
