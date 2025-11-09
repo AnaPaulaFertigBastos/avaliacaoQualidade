@@ -50,24 +50,6 @@ document.addEventListener('DOMContentLoaded', function(){
         }
     });
 
-    // on submit, ensure all questions answered
-    // form.addEventListener('submit', function(e){
-    //     for(const q of questions){
-    //         const radios = q.querySelectorAll('input[type="radio"]');
-    //         let ok = false;
-    //         for(const r of radios){ if(r.checked){ ok = true; break; } }
-    //         if(!ok){
-    //             e.preventDefault();
-    //             alert('Por favor responda todas as perguntas antes de enviar.');
-    //             // show the unanswered question
-    //             const idx = questions.indexOf(q);
-    //             index = idx;
-    //             showIndex(index);
-    //             return false;
-    //         }
-    //     }
-    // });
-
     // add a border on selected inputs
     document.querySelectorAll('.scale-label').forEach(lbl => {
         lbl.addEventListener('click', function(e){
@@ -95,6 +77,28 @@ document.addEventListener('DOMContentLoaded', function(){
             if(e.key === 'Enter' || e.key === ' '){
                 e.preventDefault();
                 lbl.click();
+            }
+        });
+    });
+
+    // auto-advance after selecting an option (if there is a next question)
+    let autoAdvanceTimer = null;
+    const AUTO_ADVANCE_DELAY = 350; // ms
+
+    document.querySelectorAll('input[type="radio"]').forEach(input => {
+        input.addEventListener('change', function(){
+            // only auto-advance for radio inputs (not feedback textareas)
+            // advance only if not on the last question
+            if(index < questions.length - 1){
+                // clear any previous pending advance
+                if(autoAdvanceTimer) clearTimeout(autoAdvanceTimer);
+
+                autoAdvanceTimer = setTimeout(() => {
+                    // double-check we're still not on last
+                    if(index < questions.length - 1){
+                        nextBtn.click();
+                    }
+                }, AUTO_ADVANCE_DELAY);
             }
         });
     });

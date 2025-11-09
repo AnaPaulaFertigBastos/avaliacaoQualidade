@@ -11,12 +11,27 @@ body {
   justify-content: center;
 }
 
-footer {
-  color: #959595;
+textarea.feedback {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  outline: none;
+  resize: vertical;
+  border-radius: 4px;
+  background: #f3f3f3;
+  font-size: 1rem;
+  font-family: inherit;
+  box-shadow: 0 0 0 1px #ccc inset;
 }
 
-.title {
+textarea.feedback:focus {
+  box-shadow: 0 0 0 2px #6a8cff inset;
+  background: #fff;
+}
 
+
+footer {
+  color: #959595;
 }
 
 .card {

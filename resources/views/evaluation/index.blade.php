@@ -30,9 +30,6 @@
                 @csrf
 
                 <div class="form-row">
-                    
-                   
-
                     @if(!empty($selectedSetorId))
                         <input type="hidden" name="setor_id" value="{{ $selectedSetorId }}">
                     @endif
@@ -52,8 +49,8 @@
                                 <p class="question-text"><strong>{{ $q->texto }}</strong></p>
                                 @if ($q->resposta_numerica == false)
                                     <div class="feedback-row">
-                                        <label for="feedback">Feedback adicional (opcional)</label><br>
-                                        <textarea name="responses[{{ $q->id }}]" id="feedback" rows="4" style="width:100%"></textarea>
+                                        
+                                        <textarea name="responses[{{ $q->id }}]" id="feedback" class="feedback" rows="4" style="width:100%"></textarea>
                                     </div>
                                 @else
                                     <div class="scale" style="">

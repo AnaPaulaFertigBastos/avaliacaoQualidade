@@ -156,7 +156,7 @@ class AvaliacaoController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Erro salvando avaliações: ' . $e->getMessage(), ['exception' => $e]);
-            return back()->withErrors(['general' => 'Erro ao salvar avaliações. Tente novamente mais tarde.' . $e->getMessage(), ['exception' => $e]])->withInput();
+            return back()->withErrors(['general' => 'Erro ao salvar avaliações. Tente novamente mais tarde.'])->withInput();
         }
 
         // Sucesso: mostrar página de agradecimento e repassar setor/dispositivo usados
