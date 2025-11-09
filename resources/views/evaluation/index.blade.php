@@ -2,6 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="utf-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Avaliação</title>
     
@@ -13,7 +14,7 @@
         </div>
         
         @if($selectedDeviceId == null || $selectedSetorId == null)
-            <p>Insira, na URL, um Setor e Dispositivo válidos para prosseguir com a avaliação, respectivamente.</p>
+            <p>Insira, na URL, um Setor e Dispositivo válidos para prosseguir com a avaliação, respectivamente. Exemplo: /avaliacao/{setorId}/{dispositivoId}</p>
         @else
             {{-- exibe erros de validação, se houver --}}
             @if($errors->any())
@@ -26,7 +27,7 @@
                 </div>
             @endif
             <p class="subtitle">Por favor, avalie de 0 (MUITO INSATISFEITO) a 10 (COMPLETAMENTE SATISFEITO).</p>
-            <form method="POST" action="{{ route('evaluation.store') }}" id="evalForm">
+            <form method="POST" action="{{ route('avaliacao.salvar') }}" id="evalForm">
                 @csrf
 
                 <div class="form-row">
@@ -41,46 +42,10 @@
 
                 <hr>
 
-                <div class="questions-wrap">
-                    @foreach($questions as $q)
-                        <div class="question" data-index="{{ $loop->index }}" aria-hidden="{{ $loop->index === 0 ? 'false' : 'true' }}">
-                            <div class="question-inner">
-                                <p class="question-number"><strong>{{ $loop->iteration }} / {{ $questions->count() }}</strong></p>
-                                <p class="question-text"><strong>{{ $q->texto }}</strong></p>
-                                @if ($q->resposta_numerica == false)
-                                    <div class="feedback-row">
-                                        
-                                        <textarea name="responses[{{ $q->id }}]" id="feedback" class="feedback" rows="4" style="width:100%"></textarea>
-                                    </div>
-                                @else
-                                    <div class="scale" style="">
-                                        @for($i = 0; $i <= 10; $i++)
-                                            @php
-                                                // Gera a cor de forma gradiente (vermelho → verde)
-                                                // R vai de 255 → 0, G vai de 0 → 200 aproximadamente
-                                                $r = 255 - ($i * 25);
-                                                $g = $i * 20;
-                                                $color = "rgb($r, $g, 0)";
-                                            @endphp
-
-                                            <label class="scale-label">
-                                                <input type="radio" name="responses[{{ $q->id }}]" value="{{ $i }}" style="display: none;">
-                                                <span class="scale-value"
-                                                    style="
-                                                        background-color: {{ $color }};
-                                                    "
-                                                    onmouseover="this.style.transform='scale(1.1)'; this.style.boxShadow='0 0 8px rgba(0,0,0,0.3)';"
-                                                    onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none';"
-                                                >
-                                                    {{ $i }}
-                                                </span>
-                                            </label>
-                                        @endfor
-                                    </div>
-                                @endif
-                            </div>
-                        </div>
-                    @endforeach
+                {{-- container vazio: perguntas serão carregadas por AJAX --}}
+                <div class="questions-wrap" id="questionsWrap"
+                     data-setor="{{ $selectedSetorId }}" data-device="{{ $selectedDeviceId }}">
+                    <p class="loading">Carregando perguntas…</p>
                 </div>
 
                 

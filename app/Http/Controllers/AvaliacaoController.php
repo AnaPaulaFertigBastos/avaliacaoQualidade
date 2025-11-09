@@ -23,8 +23,8 @@ class AvaliacaoController extends Controller
         $selectedSetorId = null;
         $selectedDeviceName = null;
 
-        // Se vier um dispositivo: só tentamos buscar quando for um UUID válido.
-        // Se o valor não for um UUID, tratamos como 'null' (não pré-selecionado).
+        // Se vier um dispositivo: só tenta buscar quando for um UUID válido.
+        // Se o valor não for um UUID, trata como 'null' (não pré-selecionado).
         if ($dispositivoId && Str::isUuid($dispositivoId)) {
             $device = Dispositivo::find($dispositivoId);
             if (! $device) {
@@ -63,7 +63,7 @@ class AvaliacaoController extends Controller
     }
 
     // armazena respostas (uma avaliação gera várias linhas, uma por pergunta)
-    public function store(Request $request)
+    public function salvar(Request $request)
     {
         // validação de forma declarativa primeiro
         $data = $request->validate([
@@ -164,5 +164,12 @@ class AvaliacaoController extends Controller
             'setorId' => $setorId,
             'deviceId' => $deviceId,
         ]);
+    }
+
+    public function perguntasJson($setorId = null, $dispositivoId = null)
+    {
+        $questions = Pergunta::where('status', true)->get(['id', 'texto', 'resposta_numerica']);
+
+        return response()->json($questions);
     }
 }

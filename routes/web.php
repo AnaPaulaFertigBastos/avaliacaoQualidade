@@ -11,10 +11,13 @@ Route::get('/', function () {
 
 // route that accepts setor and dispositivo ids (UUIDs) — both optional
 // allows: /avaliacao, /avaliacao/{setorId}, /avaliacao/{setorId}/{dispositivoId}
-Route::get('/avaliacao/{setorId?}/{dispositivoId?}', [AvaliacaoController::class, 'index'])->name('evaluation.form');
+Route::get('/avaliacao/{setorId?}/{dispositivoId?}', [AvaliacaoController::class, 'index'])->name('avaliacao.form');
 
-// Submit evaluation
-Route::post('/evaluate', [AvaliacaoController::class, 'store'])->name('evaluation.store');
+// endpoint JSON de perguntas usado por AJAX
+Route::get('/avaliacao/questions/{setorId?}/{dispositivoId?}', [AvaliacaoController::class, 'perguntasJson'])->name('avaliacao.perguntas');
+
+// Enviar avaliação
+Route::post('/evaluate', [AvaliacaoController::class, 'salvar'])->name('avaliacao.salvar');
 
 // Admin routes (basic session based)
 Route::get('/admin/login', [AdministradorController::class, 'showLogin'])->name('admin.login');

@@ -11,12 +11,12 @@
     <h1>Obrigado pela sua avaliação</h1>
     <p>O Estabelecimento agradece sua resposta e ela é muito importante para nós, pois nos ajuda a melhorar continuamente nossos serviços.</p>
   <div class="actions">
-    {{-- Voltar para o formulário de avaliação (rota nomeada 'evaluation.form').
+    {{-- Voltar para o formulário de avaliação (rota nomeada 'avaliacao.form').
        Se recebemos setorId/deviceId, monta a URL com os parâmetros para reavaliar no mesmo local/dispositivo. --}}
     @if(isset($setorId) && isset($deviceId) && $setorId && $deviceId)
-      <a class="btn submit-btn" href="{{ route('evaluation.form', ['setorId' => $setorId, 'dispositivoId' => $deviceId]) }}">Avaliar novamente</a>
+      <a class="btn submit-btn" href="{{ route('avaliacao.form', ['setorId' => $setorId, 'dispositivoId' => $deviceId]) }}">Avaliar novamente</a>
     @else
-      <a class="btn submit-btn" href="{{ route('evaluation.form') }}">Avaliar novamente</a>
+      <a class="btn submit-btn" href="{{ route('avaliacao.form') }}">Avaliar novamente</a>
     @endif
   </div>
   </div>
