@@ -25,6 +25,116 @@ Laravel is a web application framework with expressive, elegant syntax. We belie
 
 Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
+## Como rodar o projeto (Windows + PostgreSQL)
+
+### Requisitos
+- PHP 8.1+ e Composer 2
+- PostgreSQL 13+ (ou compatível)
+- Extensão PHP pdo_pgsql habilitada
+- Opcional: Node.js 18+ (apenas se for compilar assets com Vite)
+
+### Passo a passo
+1) Instale dependências PHP
+
+```powershell
+composer install
+```
+
+2) Crie o arquivo `.env` a partir do exemplo e configure o banco
+
+```powershell
+Copy-Item .env.example .env
+```
+
+Edite `.env` e ajuste (exemplo usando PostgreSQL local com DB `avaliacoessistema`):
+
+```
+APP_NAME="AvaliacaoQualidade"
+APP_ENV=local
+APP_DEBUG=true
+APP_URL=http://127.0.0.1:8000
+
+DB_CONNECTION=pgsql
+DB_HOST=127.0.0.1
+DB_PORT=5432
+DB_DATABASE=avaliacoessistema
+DB_USERNAME=postgres
+DB_PASSWORD=postgres
+```
+
+3) Crie o banco de dados `avaliacoessistema` no PostgreSQL (via pgAdmin ou SQL):
+
+```sql
+CREATE DATABASE avaliacoessistema;
+```
+
+4) Gere a chave da aplicação
+
+```powershell
+php artisan key:generate
+```
+
+5) Execute as migrations (as migrations de inserção já populam perguntas, setores e dispositivos)
+
+```powershell
+php artisan migrate
+```
+
+Opcional (para começar do zero a qualquer momento):
+
+```powershell
+php artisan migrate:fresh
+```
+
+6) Suba o servidor de desenvolvimento
+
+```powershell
+php artisan serve
+```
+
+Abra em: `http://127.0.0.1:8000`
+
+### Usando a avaliação pública
+- A rota pública aceita parâmetros de rota: `/avaliacao/{setorId?}/{dispositivoId?}`
+- Para testar rapidamente, recupere um `setorId` e `dispositivoId` existentes:
+
+```powershell
+php artisan tinker
+```
+
+No Tinker:
+
+```php
+>>> \App\Models\Setor::first()->id;
+>>> \App\Models\Dispositivo::first()->id;
+```
+
+Depois acesse no navegador:
+
+```
+http://127.0.0.1:8000/avaliacao/<setorId>/<dispositivoId>
+```
+
+As perguntas são carregadas por AJAX e o formulário envia as respostas para o backend.
+
+### Compilação de assets (opcional)
+O projeto já inclui CSS/JS prontos em `public/`. Se desejar trabalhar com os arquivos em `resources/` via Vite:
+
+```powershell
+npm install
+npm run build
+```
+
+### Dicas e problemas comuns
+- Alterou rotas/nomes e algo ficou em cache? Limpe caches com:
+
+```powershell
+php artisan optimize:clear
+```
+
+- Conexão com banco falhou: confirme host/porta/usuário/senha no `.env` e se o DB `avaliacoessistema` existe.
+- Erros de migração: use `php artisan migrate:fresh` em ambiente local para recriar as tabelas.
+
 ## Learning Laravel
 
 Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
