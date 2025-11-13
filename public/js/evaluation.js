@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', function(){
             inner += `<p class="question-text"><strong>${escaparHtml(q.texto)}</strong></p>`;
 
             if(!q.resposta_numerica){
-                inner += `<div class="feedback-row"><textarea name="responses[${q.id}]" class="feedback" rows="4" style="width:100%"></textarea></div>`;
+                inner += `<div class="feedback-row"><textarea name="responses[${q.id}]" class="feedback" rows="4"></textarea></div>`;
             } else {
                 inner += `<div class="scale">`;
                 for(let i=0;i<=10;i++){
@@ -166,7 +166,6 @@ document.addEventListener('DOMContentLoaded', function(){
             .replace(/"/g, '&quot;')
             .replace(/'/g, '&#039;');
     }
-
     // fetch questions via AJAX
     (function fetchQuestions(){
         const urlBase = '/avaliacao/questions';

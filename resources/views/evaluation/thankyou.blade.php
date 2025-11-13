@@ -21,5 +21,6 @@
   </div>
   </div>
   <link rel="stylesheet" href="{{ asset('css/evaluation.css') }}">
+  <script src="{{ asset('js/thankyou.js') }}" defer></script>
 </body>
 </html>

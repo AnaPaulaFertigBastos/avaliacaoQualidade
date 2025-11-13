@@ -77,7 +77,6 @@ class AvaliacaoController extends Controller
         $deviceId = is_string($data['device_id']) ? trim($data['device_id']) : $data['device_id'];
         $setorId = isset($data['setor_id']) && is_string($data['setor_id']) ? trim($data['setor_id']) : ($data['setor_id'] ?? null);
 
-        // checagens extras (validation 'exists' cobre a maior parte, mas verificamos antes de gravar)
         $device = Dispositivo::find($deviceId);
         if (! $device) {
             return back()->withErrors(['device_id' => 'Dispositivo informado não encontrado.'])->withInput();
@@ -90,7 +89,6 @@ class AvaliacaoController extends Controller
             }
         }
 
-        // usar transação para garantir atomicidade
         DB::beginTransaction();
         try {
             if (empty($data['responses'])) {
