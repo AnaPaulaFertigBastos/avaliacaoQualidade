@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', function(){
             inner += `<p class="question-text"><strong>${escaparHtml(q.texto)}</strong></p>`;
 
             if(!q.resposta_numerica){
-                inner += `<div class="feedback-row"><textarea name="responses[${q.id}]" class="feedback" rows="4"></textarea></div>`;
+                inner += `<div class="feedback-row"><textarea name="responses[${q.id}]" class="feedback" rows="4" maxlength="2000"></textarea><div class="char-counter"><span class="count">0</span>/2000</div></div>`;
             } else {
                 inner += `<div class="scale">`;
                 for(let i=0;i<=10;i++){
@@ -152,6 +152,7 @@ document.addEventListener('DOMContentLoaded', function(){
     // attach handlers
     anexarManipuladoresScale();
     anexarAutoAvancoRadios();
+    anexarContadorCaracteres();
 
         // initialize UI state
         index = 0;
@@ -165,6 +166,20 @@ document.addEventListener('DOMContentLoaded', function(){
             .replace(/>/g, '&gt;')
             .replace(/"/g, '&quot;')
             .replace(/'/g, '&#039;');
+    }
+
+    function anexarContadorCaracteres(){
+        const MAX = 2000;
+        document.querySelectorAll('textarea.feedback').forEach(ta => {
+            const row = ta.closest('.feedback-row');
+                const countEl = row ? row.querySelector('.char-counter .count') : null;
+            const update = () => {
+                const len = ta.value.length;
+                    if(countEl) countEl.textContent = Math.min(len, MAX).toString();
+            };
+            ta.addEventListener('input', update);
+            update();
+        });
     }
     // fetch questions via AJAX
     (function fetchQuestions(){

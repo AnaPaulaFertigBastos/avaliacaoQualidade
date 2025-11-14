@@ -37,7 +37,7 @@ return new class extends Migration
             $table->uuid('pergunta_id');
             $table->uuid('dispositivo_id');
             $table->integer('resposta')->nullable();
-            $table->string('feedback_textual')->nullable();
+            $table->text('feedback_textual')->nullable();
             $table->timestampTz('data')->useCurrent();
 
             $table->foreign('setor_id')->references('id')->on('setores')->onDelete('cascade');

@@ -21,6 +21,7 @@ textarea.feedback {
   font-size: 1rem;
   font-family: inherit;
   box-shadow: 0 0 0 1px #ccc inset;
+  padding: 6px 0 0 0px;
 }
 
 textarea.feedback:focus {
@@ -165,6 +166,13 @@ footer {
 
 .feedback-row{
   margin-top:18px
+}
+
+.char-counter{
+  margin-top:6px;
+  font-size:0.85rem;
+  color:#666;
+  text-align:right
 }
 
 
