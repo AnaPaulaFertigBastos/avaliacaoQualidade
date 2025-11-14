@@ -9,6 +9,8 @@ document.addEventListener('DOMContentLoaded', function(){
     const questionsWrap = document.getElementById('questionsWrap');
     const selectedSetor = questionsWrap ? questionsWrap.dataset.setor || '' : '';
     const selectedDevice = questionsWrap ? questionsWrap.dataset.device || '' : '';
+    const LIMITE_INATIVIDADE_MS = 180000; // 3 minutos
+    let temporizadorInatividade = null;
 
     function showIndex(i){
         questions.forEach(q=>{
@@ -27,6 +29,7 @@ document.addEventListener('DOMContentLoaded', function(){
             nextBtn.style.display = '';
             submitBtn.style.display = 'none';
         }
+        redefinirInatividade();
     }
 
     function currentAnswered(){
@@ -176,10 +179,23 @@ document.addEventListener('DOMContentLoaded', function(){
             const update = () => {
                 const len = ta.value.length;
                     if(countEl) countEl.textContent = Math.min(len, MAX).toString();
+                redefinirInatividade();
             };
             ta.addEventListener('input', update);
             update();
         });
+    }
+    function redefinirInatividade(){
+        if(temporizadorInatividade) clearTimeout(temporizadorInatividade);
+        temporizadorInatividade = setTimeout(() => {
+            window.location.reload();
+        }, LIMITE_INATIVIDADE_MS);
+    }
+    function iniciarMonitorInatividade(){
+        ['mousemove','mousedown','keydown','touchstart','scroll'].forEach(evt => {
+            window.addEventListener(evt, redefinirInatividade, { passive: true });
+        });
+        redefinirInatividade();
     }
     // fetch questions via AJAX
     (function fetchQuestions(){
@@ -193,6 +209,7 @@ document.addEventListener('DOMContentLoaded', function(){
             .then(r => r.json())
             .then(data => {
                 renderizarPerguntasNoDOM(data);
+                iniciarMonitorInatividade();
             })
             .catch(err => {
                 const wrap = document.getElementById('questionsWrap');
