@@ -5,7 +5,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Avaliação</title>
-    
+    <link rel="stylesheet" href="{{ asset('css/evaluation.css') }}">
 </head>
 <body>
     <div class="card evaluation-card">
@@ -61,7 +61,7 @@
     <footer>
         Sua avaliação espontânea é anônima, nenhuma informação pessoal é solicitada ou armazenada.
     </footer>
-    <link rel="stylesheet" href="{{ asset('css/evaluation.css') }}">
+    
     <script src="{{ asset('js/evaluation.js') }}" defer></script>
     
 </body>
