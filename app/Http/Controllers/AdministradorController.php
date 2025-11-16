@@ -54,9 +54,9 @@ class AdministradorController extends Controller
             $stats[] = ['question' => $q, 'average' => $avg];
         }
         // Dados para gráfico de média por pergunta (apenas perguntas numéricas)
-        $statsNumericas = array_filter($stats, fn($s) => $s['question']->resposta_numerica);
-        $chartLabels = array_map(fn($s) => $s['question']->texto, $statsNumericas);
-        $chartAverages = array_map(fn($s) => $s['average'] !== null ? round($s['average'], 2) : 0, $statsNumericas);
+        $statsNumericas = array_values(array_filter($stats, fn($s) => $s['question']->resposta_numerica));
+        $chartLabels = array_values(array_map(fn($s) => (string)$s['question']->texto, $statsNumericas));
+        $chartAverages = array_values(array_map(fn($s) => $s['average'] !== null ? (float)round($s['average'], 2) : 0.0, $statsNumericas));
 
         // Distribuição de pontuações (0-10) geral
         $scoreCounts = Avaliacao::select('resposta')
@@ -66,6 +66,10 @@ class AdministradorController extends Controller
             ->map(fn($grp) => $grp->count());
         $scores = range(0,10);
         $scoreDistribution = array_map(fn($v) => $scoreCounts->get($v, 0), $scores);
+
+        // Garantir arrays indexados simples
+        $scores = array_values(array_map('intval', $scores));
+        $scoreDistribution = array_values(array_map('intval', $scoreDistribution));
 
         return view('admin.dashboard', [
             'stats' => $stats,

@@ -47,8 +47,15 @@
     const labelsDistrib = @json($scoreDistributionLabels);
     const valoresDistrib = @json($scoreDistributionValues);
 
+    console.log('labelsMedias', labelsMedias);
+    console.log('valoresMedias', valoresMedias);
+    console.log('labelsDistrib', labelsDistrib);
+    console.log('valoresDistrib', valoresDistrib);
+
     function createBarChart(){
-      new Chart(document.getElementById('chartMedias'), {
+      const ctxMedias = document.getElementById('chartMedias');
+      if(!ctxMedias){ console.warn('Canvas chartMedias não encontrado'); return; }
+      new Chart(ctxMedias, {
         type: 'bar',
         data: {
           labels: labelsMedias,
@@ -74,7 +81,9 @@
     }
 
     function createDistribChart(){
-      new Chart(document.getElementById('chartDistribuicao'), {
+      const ctxDistrib = document.getElementById('chartDistribuicao');
+      if(!ctxDistrib){ console.warn('Canvas chartDistribuicao não encontrado'); return; }
+      new Chart(ctxDistrib, {
         type: 'doughnut',
         data: {
           labels: labelsDistrib.map(l => l.toString()),

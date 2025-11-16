@@ -11,6 +11,7 @@ class Pergunta extends Model
 
     public $incrementing = false;
     protected $keyType = 'string';
+    public $timestamps = false;
 
     protected $fillable = ['id', 'texto', 'status', 'resposta_numerica'];
 

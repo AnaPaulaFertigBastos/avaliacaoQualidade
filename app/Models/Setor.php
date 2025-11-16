@@ -16,6 +16,7 @@ class Setor extends Model
      * Eloquent por padrão tentaria "setors" e causaria erro com PostgreSQL.
      */
     protected $table = 'setores';
+    public $timestamps = false;
 
     protected $fillable = ['id', 'descricao', 'ativo'];
 
