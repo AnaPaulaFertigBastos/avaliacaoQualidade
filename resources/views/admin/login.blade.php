@@ -13,7 +13,7 @@
     <form method="POST" action="{{ route('admin.login.post') }}">
       @csrf
       <div><label>E-mail</label><br><input name="email" type="email" required></div>
-      <div style="margin-top:8px"><label>Senha</label><br><input type="password" name="senha" required></div>
+      <div style="margin-top:8px"><label>Senha</label><br><input type="password" name="password" required></div>
       <div style="margin-top:12px"><button type="submit">Entrar</button></div>
     </form>
   </div>

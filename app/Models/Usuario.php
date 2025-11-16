@@ -3,9 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Usuario extends Model
+class Usuario extends Authenticatable
 {
     use HasFactory;
 
@@ -18,4 +18,9 @@ class Usuario extends Model
 
     const CREATED_AT = 'data_cadastro';
     const UPDATED_AT = 'data_atualizacao';
+
+    public function getAuthPassword()
+    {
+        return $this->senha;
+    }
 }

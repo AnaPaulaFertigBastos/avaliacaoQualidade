@@ -13,20 +13,28 @@ Route::get('/', function () {
 // allows: /avaliacao, /avaliacao/{setorId}, /avaliacao/{setorId}/{dispositivoId}
 Route::get('/avaliacao/{setorId?}/{dispositivoId?}', [AvaliacaoController::class, 'index'])->name('avaliacao.form');
 
+
 // endpoint JSON de perguntas usado por AJAX
 Route::get('/avaliacao/questions/{setorId?}/{dispositivoId?}', [AvaliacaoController::class, 'perguntasJson'])->name('avaliacao.perguntas');
 
 // Enviar avaliação
 Route::post('/evaluate', [AvaliacaoController::class, 'salvar'])->name('avaliacao.salvar');
 
-// Admin routes (basic session based)
-Route::get('/admin/login', [AdministradorController::class, 'showLogin'])->name('admin.login');
-Route::post('/admin/login', [AdministradorController::class, 'login'])->name('admin.login.post');
-Route::get('/admin/logout', [AdministradorController::class, 'logout'])->name('admin.logout');
-Route::get('/admin', [AdministradorController::class, 'dashboard'])->name('admin.dashboard');
+Route::prefix('admin')->name('admin.')->group(function() {
+    // Login público
+    Route::get('/login', [AdministradorController::class, 'showLogin'])->name('login');
+    Route::post('/login', [AdministradorController::class, 'login'])->name('login.post');
 
-// Questions management (basic)
-Route::get('/admin/questions', [AdministradorController::class, 'questionsIndex'])->name('admin.questions.index');
-Route::get('/admin/questions/create', [AdministradorController::class, 'questionsCreate'])->name('admin.questions.create');
-Route::post('/admin/questions', [AdministradorController::class, 'questionsStore'])->name('admin.questions.store');
+    // Protegidas
+    Route::middleware('auth')->group(function() {
+        Route::post('/logout', [AdministradorController::class, 'logout'])->name('logout');
+        Route::get('/', [AdministradorController::class, 'dashboard'])->name('dashboard');
+        Route::get('/questions', [AdministradorController::class, 'questionsIndex'])->name('questions.index');
+        Route::get('/questions/create', [AdministradorController::class, 'questionsCreate'])->name('questions.create');
+        Route::post('/questions', [AdministradorController::class, 'questionsStore'])->name('questions.store');
+        Route::get('/questions/{id}/edit', [AdministradorController::class, 'questionsEdit'])->name('questions.edit');
+        Route::put('/questions/{id}', [AdministradorController::class, 'questionsUpdate'])->name('questions.update');
+        Route::delete('/questions/{id}', [AdministradorController::class, 'questionsDestroy'])->name('questions.destroy');
+    });
+});
 

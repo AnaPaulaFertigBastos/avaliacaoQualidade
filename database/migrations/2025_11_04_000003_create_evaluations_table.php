@@ -3,6 +3,9 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 return new class extends Migration
 {
@@ -55,6 +58,17 @@ return new class extends Migration
             $table->timestampTz('data_cadastro')->useCurrent();
             $table->timestampTz('data_atualizacao')->useCurrent();
         });
+
+        // Usuário administrador inicial (login)
+        DB::table('usuarios')->insert([
+            'id' => Str::uuid()->toString(),
+            'nome' => 'Administrador',
+            'email' => 'ana.bastos@unidavi.edu.br',
+            'senha' => Hash::make('admin123'),
+            'status' => true,
+            'data_cadastro' => now(),
+            'data_atualizacao' => now(),
+        ]);
     }
 
     public function down()

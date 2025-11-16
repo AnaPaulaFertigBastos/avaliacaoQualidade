@@ -8,17 +8,39 @@
 </head>
 <body>
   <h1>Perguntas</h1>
-  <p><a href="{{ route('admin.questions.create') }}">Criar nova pergunta</a> | <a href="{{ route('admin.dashboard') }}">Voltar</a></p>
+  <p>
+    <a href="{{ route('admin.questions.create') }}">Criar nova pergunta</a> |
+    <a href="{{ route('admin.dashboard') }}">Voltar</a> |
+    <form action="{{ route('admin.logout') }}" method="POST" style="display:inline">
+      @csrf
+      <button type="submit" style="background:none;border:none;color:#06c;cursor:pointer;padding:0">Sair</button>
+    </form>
+  </p>
   @if(session('success'))<div style="color:green">{{ session('success') }}</div>@endif
   <table>
-    <thead><tr><th>#</th><th>Texto</th><th>Ordem</th><th>Ativa</th></tr></thead>
+    <thead>
+      <tr>
+        <th>Texto</th>
+        <th>Ordem</th>
+        <th>Ativa</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
     <tbody>
       @foreach($questions as $q)
         <tr>
-          <td>{{ $q->id }}</td>
-          <td>{{ $q->text }}</td>
+          <td>{{ $q->texto }}</td>
           <td>{{ $q->order }}</td>
-          <td>{{ $q->active ? 'Sim' : 'Não' }}</td>
+          <td>{{ $q->status ? 'Ativo' : 'Inativo' }}</td>
+          <td>
+            <a href="{{ route('admin.questions.edit', $q->id) }}">Editar</a>
+            |
+            <form action="{{ route('admin.questions.destroy', $q->id) }}" method="POST" style="display:inline" onsubmit="return confirm('Excluir esta pergunta? Esta ação não pode ser desfeita.');">
+              @csrf
+              @method('DELETE')
+              <button type="submit" style="background:none;border:none;color:#b00;cursor:pointer;padding:0">Excluir</button>
+            </form>
+          </td>
         </tr>
       @endforeach
     </tbody>
