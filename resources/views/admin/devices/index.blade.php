@@ -1,41 +1,31 @@
-<!doctype html>
-<html lang="pt-BR">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Dispositivos</title>
-  <style>body{font-family:Arial;padding:20px} table{width:100%;border-collapse:collapse} th,td{padding:8px;border:1px solid #ddd}</style>
-</head>
-<body>
-  <h1>Dispositivos</h1>
-  <p>
-    <a href="{{ route('admin.devices.create') }}">Cadastrar dispositivo</a> |
-    <a href="{{ route('admin.dashboard') }}">Voltar</a> |
-    <form action="{{ route('admin.logout') }}" method="POST" style="display:inline">
-      @csrf
-      <button type="submit" style="background:none;border:none;color:#06c;cursor:pointer;padding:0">Sair</button>
-    </form>
-  </p>
-  @if(session('success'))<div style="color:green">{{ session('success') }}</div>@endif
-  <table>
-    <thead>
-      <tr>
-        <th>Nome</th>
-        <th>Status</th>
-        <th>Ações</th>
-      </tr>
-    </thead>
-    <tbody>
-      @foreach($devices as $d)
-        <tr>
-          <td>{{ $d->nome }}</td>
-          <td>{{ $d->status ? 'Ativo' : 'Inativo' }}</td>
-          <td>
-            <a href="{{ route('admin.devices.edit', $d->id) }}">Editar</a>
-          </td>
-        </tr>
-      @endforeach
-    </tbody>
-  </table>
-</body>
-</html>
+@extends('admin.layout')
+@section('title','Dispositivos')
+@section('content')
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h4 mb-0">Dispositivos</h1>
+    <a class="btn btn-primary btn-sm" href="{{ route('admin.devices.create') }}">Cadastrar</a>
+  </div>
+  @if(session('success'))<div class="alert alert-success py-1">{{ session('success') }}</div>@endif
+  <div class="card">
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped table-sm align-middle mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Nome</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          @foreach($devices as $d)
+            <tr>
+              <td>{{ $d->nome }}</td>
+              <td><span class="badge {{ $d->status ? 'bg-success' : 'bg-secondary' }}">{{ $d->status ? 'Ativo' : 'Inativo' }}</span></td>
+              <td><a class="btn btn-outline-secondary btn-sm" href="{{ route('admin.devices.edit', $d->id) }}">Editar</a></td>
+            </tr>
+          @endforeach
+        </tbody>
+      </table>
+    </div>
+  </div>
+@endsection

@@ -1,21 +1,28 @@
-<!doctype html>
-<html lang="pt-BR">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Criar Pergunta</title>
-  <style>body{font-family:Arial;padding:20px}.card{background:#fff;padding:20px;border-radius:6px}</style>
-</head>
-<body>
+@extends('admin.layout')
+@section('title','Criar Pergunta')
+@section('content')
   <div class="card">
-    <h1>Criar Pergunta</h1>
-    <form method="POST" action="{{ route('admin.questions.store') }}">
+    <h1 class="h5 mb-3">Criar Pergunta</h1>
+    <form method="POST" action="{{ route('admin.questions.store') }}" class="row g-3">
       @csrf
-      <div><label>Texto</label><br><textarea name="text" required rows="4" style="width:100%"></textarea></div>
-      <div style="margin-top:8px"><label>Ordem</label><br><input name="order" type="number"></div>
-      <div style="margin-top:8px"><label><input type="checkbox" name="active" value="1" checked> Ativa</label></div>
-      <div style="margin-top:12px"><button type="submit">Salvar</button> <a href="{{ route('admin.questions.index') }}">Cancelar</a></div>
+      <div class="col-12">
+        <label for="texto" class="form-label">Texto</label>
+        <textarea id="texto" name="text" required rows="4" class="form-control"></textarea>
+      </div>
+      <div class="col-12 col-md-4">
+        <label for="order" class="form-label">Ordem</label>
+        <input id="order" name="order" type="number" class="form-control">
+      </div>
+      <div class="col-12">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="ativa" name="active" value="1" checked>
+          <label class="form-check-label" for="ativa">Ativa</label>
+        </div>
+      </div>
+      <div class="col-12 d-flex gap-2">
+        <button type="submit" class="btn btn-primary btn-sm">Salvar</button>
+        <a href="{{ route('admin.questions.index') }}" class="btn btn-outline-secondary btn-sm">Cancelar</a>
+      </div>
     </form>
   </div>
-</body>
-</html>
+@endsection

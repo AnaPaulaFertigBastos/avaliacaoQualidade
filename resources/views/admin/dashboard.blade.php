@@ -1,41 +1,45 @@
-<!doctype html>
-<html lang="pt-BR">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Admin Dashboard</title>
-  <style>body{font-family:Arial;padding:20px} .card{background:#fff;padding:20px;border-radius:6px}</style>
-</head>
-<body>
-  <div class="card">
-    <h1>Painel Administrativo</h1>
-    <p>
-      <a href="{{ route('admin.questions.index') }}">Gerenciar Perguntas</a> |
-      <a href="{{ route('admin.devices.index') }}">Gerenciar Dispositivos</a> |
-      <form action="{{ route('admin.logout') }}" method="POST" style="display:inline">
-        @csrf
-        <button type="submit" style="background:none;border:none;color:#06c;cursor:pointer;padding:0">Sair</button>
-      </form>
-    </p>
-
-    <h2>Média por Pergunta</h2>
-    <canvas id="chartMedias" style="max-width: 900px; width:100%; height:320px; margin-bottom:24px;"></canvas>
-    <h2>Distribuição Geral de Pontuações</h2>
-    <canvas id="chartDistribuicao" style="max-width: 900px; width:100%; height:320px; margin-bottom:24px;"></canvas>
-    <h2>Dados Tabulares</h2>
-    <table border="1" cellpadding="8" cellspacing="0">
-      <thead><tr><th>#</th><th>Pergunta</th><th>Média</th></tr></thead>
-      <tbody>
-        @foreach($stats as $s)
-          <tr>
-            <td>{{ $loop->iteration }}</td>
-            <td>{{ $s['question']->texto }}</td>
-            <td>{{ $s['average'] ? number_format($s['average'],2,',','.') : '—' }}</td>
-          </tr>
-        @endforeach
-      </tbody>
-    </table>
+@extends('admin.layout')
+@section('title','Dashboard')
+@section('content')
+  <div class="card mb-4">
+    <h1 class="h5 mb-3">Painel Administrativo</h1>
+    <p class="text-muted mb-0">Visão geral das avaliações.</p>
   </div>
+  <div class="row g-4">
+    <div class="col-12 col-xl-6">
+      <div class="card">
+        <h2 class="h6">Média por Pergunta</h2>
+        <canvas id="chartMedias" class="chart-canvas"></canvas>
+      </div>
+    </div>
+    <div class="col-12 col-xl-6">
+      <div class="card">
+        <h2 class="h6">Distribuição Geral de Pontuações</h2>
+        <canvas id="chartDistribuicao" class="chart-canvas"></canvas>
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="card">
+        <h2 class="h6">Dados Tabulares</h2>
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped table-sm mb-0">
+            <thead class="table-light"><tr><th>#</th><th>Pergunta</th><th>Média</th></tr></thead>
+            <tbody>
+              @foreach($stats as $s)
+                <tr>
+                  <td>{{ $loop->iteration }}</td>
+                  <td>{{ $s['question']->texto }}</td>
+                  <td>{{ $s['average'] ? number_format($s['average'],2,',','.') : '—' }}</td>
+                </tr>
+              @endforeach
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+@endsection
+@push('scripts')
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <script>
     const labelsMedias = @json($chartLabels);
@@ -94,5 +98,4 @@
     createBarChart();
     createDistribChart();
   </script>
-</body>
-</html>
+@endpush

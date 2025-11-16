@@ -1,35 +1,31 @@
-<!doctype html>
-<html lang="pt-BR">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Novo Dispositivo</title>
-  <style>body{font-family:Arial;padding:20px} .card{max-width:720px;margin:0 auto;background:#fff;padding:20px;border-radius:6px}</style>
-</head>
-<body>
+@extends('admin.layout')
+@section('title','Cadastrar Dispositivo')
+@section('content')
   <div class="card">
-    <h1>Cadastrar Dispositivo</h1>
+    <h1 class="h5 mb-3">Cadastrar Dispositivo</h1>
     @if($errors->any())
-      <div style="color:#b00; margin-bottom:12px;">
+      <div class="alert alert-danger py-2">
         @foreach($errors->all() as $e)
           <div>{{ $e }}</div>
         @endforeach
       </div>
     @endif
-    <form method="POST" action="{{ route('admin.devices.store') }}">
+    <form method="POST" action="{{ route('admin.devices.store') }}" class="row g-3">
       @csrf
-      <div class="form-row" style="margin-bottom:12px;">
-        <label for="nome"><strong>Nome</strong></label><br>
-        <input type="text" id="nome" name="nome" value="{{ old('nome') }}" required style="width:100%;padding:8px;box-sizing:border-box;">
+      <div class="col-12">
+        <label for="nome" class="form-label">Nome</label>
+        <input type="text" id="nome" name="nome" value="{{ old('nome') }}" required class="form-control">
       </div>
-      <div class="form-row" style="margin-bottom:12px;">
-        <label><input type="checkbox" name="status" value="1" {{ old('status', true) ? 'checked' : '' }}> Ativo</label>
+      <div class="col-12">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="status" name="status" value="1" {{ old('status', true) ? 'checked' : '' }}>
+          <label class="form-check-label" for="status">Ativo</label>
+        </div>
       </div>
-      <div class="actions" style="display:flex;gap:10px;align-items:center;">
-        <button type="submit">Salvar</button>
-        <a href="{{ route('admin.devices.index') }}">Cancelar</a>
+      <div class="col-12 d-flex gap-2">
+        <button type="submit" class="btn btn-primary btn-sm">Salvar</button>
+        <a href="{{ route('admin.devices.index') }}" class="btn btn-outline-secondary btn-sm">Cancelar</a>
       </div>
     </form>
   </div>
-</body>
-</html>
+@endsection
