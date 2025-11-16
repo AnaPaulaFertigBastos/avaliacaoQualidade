@@ -53,8 +53,27 @@ class AdministradorController extends Controller
             $avg = Avaliacao::where('pergunta_id', $q->id)->avg('resposta');
             $stats[] = ['question' => $q, 'average' => $avg];
         }
+        // Dados para gráfico de média por pergunta (apenas perguntas numéricas)
+        $statsNumericas = array_filter($stats, fn($s) => $s['question']->resposta_numerica);
+        $chartLabels = array_map(fn($s) => $s['question']->texto, $statsNumericas);
+        $chartAverages = array_map(fn($s) => $s['average'] !== null ? round($s['average'], 2) : 0, $statsNumericas);
 
-        return view('admin.dashboard', compact('stats'));
+        // Distribuição de pontuações (0-10) geral
+        $scoreCounts = Avaliacao::select('resposta')
+            ->whereNotNull('resposta')
+            ->get()
+            ->groupBy('resposta')
+            ->map(fn($grp) => $grp->count());
+        $scores = range(0,10);
+        $scoreDistribution = array_map(fn($v) => $scoreCounts->get($v, 0), $scores);
+
+        return view('admin.dashboard', [
+            'stats' => $stats,
+            'chartLabels' => $chartLabels,
+            'chartAverages' => $chartAverages,
+            'scoreDistributionLabels' => $scores,
+            'scoreDistributionValues' => $scoreDistribution,
+        ]);
     }
 
     public function questionsIndex()
