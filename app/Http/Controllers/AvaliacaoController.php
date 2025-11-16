@@ -26,7 +26,7 @@ class AvaliacaoController extends Controller
         // Se vier um dispositivo: só tenta buscar quando for um UUID válido.
         // Se o valor não for um UUID, trata como 'null' (não pré-selecionado).
         if ($dispositivoId && Str::isUuid($dispositivoId)) {
-            $device = Dispositivo::find($dispositivoId);
+            $device = Dispositivo::where('id', $dispositivoId)->where('status', true)->first();
             if (! $device) {
                 // GUID informado e válido, mas não existe no banco -> 404 claro
                 abort(404, "Dispositivo '{$dispositivoId}' não encontrado");
@@ -77,7 +77,7 @@ class AvaliacaoController extends Controller
         $deviceId = is_string($data['device_id']) ? trim($data['device_id']) : $data['device_id'];
         $setorId = isset($data['setor_id']) && is_string($data['setor_id']) ? trim($data['setor_id']) : ($data['setor_id'] ?? null);
 
-        $device = Dispositivo::find($deviceId);
+        $device = Dispositivo::where('id', $deviceId)->where('status', true)->first();
         if (! $device) {
             return back()->withErrors(['device_id' => 'Dispositivo informado não encontrado.'])->withInput();
         }
