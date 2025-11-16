@@ -48,6 +48,7 @@ class AdministradorController extends Controller
         }
 
         $questions = Pergunta::all();
+        $setores = \App\Models\Setor::all();
         $stats = [];
         foreach ($questions as $q) {
             $avg = Avaliacao::where('pergunta_id', $q->id)->avg('resposta');
@@ -77,6 +78,44 @@ class AdministradorController extends Controller
             'chartAverages' => $chartAverages,
             'scoreDistributionLabels' => $scores,
             'scoreDistributionValues' => $scoreDistribution,
+            'setores' => $setores,
+        ]);
+    }
+
+    public function dashboardDados(?string $setorId = null)
+    {
+        if (!Auth::check()) {
+            return response()->json(['error' => 'Não autenticado'], 401);
+        }
+
+        // Perguntas numéricas
+        $perguntas = Pergunta::where('resposta_numerica', true)->get();
+        $labels = [];
+        $averages = [];
+        foreach ($perguntas as $p) {
+            $query = Avaliacao::where('pergunta_id', $p->id);
+            if ($setorId && \Illuminate\Support\Str::isUuid($setorId)) {
+                $query->where('setor_id', $setorId);
+            }
+            $avg = $query->avg('resposta');
+            $labels[] = (string)$p->texto;
+            $averages[] = $avg !== null ? (float)round($avg, 2) : 0.0;
+        }
+
+        // Distribuição de pontuações geral (ou por setor se definido)
+        $distQuery = Avaliacao::select('resposta')->whereNotNull('resposta');
+        if ($setorId && \Illuminate\Support\Str::isUuid($setorId)) {
+            $distQuery->where('setor_id', $setorId);
+        }
+        $scoreCounts = $distQuery->get()->groupBy('resposta')->map(fn($grp) => $grp->count());
+        $scores = range(0,10);
+        $distribution = array_map(fn($v) => (int)$scoreCounts->get($v, 0), $scores);
+
+        return response()->json([
+            'labels' => $labels,
+            'averages' => $averages,
+            'scoreLabels' => $scores,
+            'scoreValues' => $distribution,
         ]);
     }
 

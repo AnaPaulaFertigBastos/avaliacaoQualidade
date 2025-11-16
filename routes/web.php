@@ -29,6 +29,7 @@ Route::prefix('admin')->name('admin.')->group(function() {
     Route::middleware('auth')->group(function() {
         Route::post('/logout', [AdministradorController::class, 'logout'])->name('logout');
         Route::get('/', [AdministradorController::class, 'dashboard'])->name('dashboard');
+        Route::get('/dashboard/dados/{setorId?}', [AdministradorController::class, 'dashboardDados'])->name('dashboard.dados');
         Route::get('/questions', [AdministradorController::class, 'questionsIndex'])->name('questions.index');
         Route::get('/questions/create', [AdministradorController::class, 'questionsCreate'])->name('questions.create');
         Route::post('/questions', [AdministradorController::class, 'questionsStore'])->name('questions.store');
