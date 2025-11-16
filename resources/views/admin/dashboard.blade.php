@@ -31,6 +31,27 @@
     </div>
     <div class="col-12">
       <div class="card">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h2 class="h6 mb-0">Respostas Textuais Recentes</h2>
+          <a href="{{ route('admin.respostas.textuais.index') }}" class="btn btn-outline-secondary btn-sm">Ver todas</a>
+        </div>
+        @if($textualSamples->isEmpty())
+          <p class="text-muted mb-0">Não há respostas textuais registradas.</p>
+        @else
+          <ul class="list-group list-group-flush">
+            @foreach($textualSamples as $sample)
+              <li class="list-group-item px-0">
+                <div class="small text-muted mb-1"><strong>Pergunta:</strong> {{ $sample->pergunta->texto }}</div>
+                <div><strong>Resposta:</strong> {{ Str::limit($sample->feedback_textual, 160) }}</div>
+                <div class="text-muted mt-1" style="font-size:.75rem;">{{ ($sample->data instanceof \Carbon\Carbon) ? $sample->data->format('d/m/Y H:i') : \Carbon\Carbon::parse($sample->data)->format('d/m/Y H:i') }}</div>
+              </li>
+            @endforeach
+          </ul>
+        @endif
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="card">
         <h2 class="h6">Dados Tabulares</h2>
         <div class="table-responsive">
           <table class="table table-bordered table-striped table-sm mb-0">

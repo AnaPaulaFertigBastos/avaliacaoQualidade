@@ -72,6 +72,13 @@ class AdministradorController extends Controller
         $scores = array_values(array_map('intval', $scores));
         $scoreDistribution = array_values(array_map('intval', $scoreDistribution));
 
+        // Amostras de respostas textuais (máximo 3 mais recentes)
+        $textualSamples = Avaliacao::with(['pergunta'])
+            ->whereNotNull('feedback_textual')
+            ->orderBy('data', 'desc')
+            ->limit(3)
+            ->get();
+
         return view('admin.dashboard', [
             'stats' => $stats,
             'chartLabels' => $chartLabels,
@@ -79,6 +86,7 @@ class AdministradorController extends Controller
             'scoreDistributionLabels' => $scores,
             'scoreDistributionValues' => $scoreDistribution,
             'setores' => $setores,
+            'textualSamples' => $textualSamples,
         ]);
     }
 
@@ -248,5 +256,23 @@ class AdministradorController extends Controller
             'status' => (bool)($data['status'] ?? false),
         ]);
         return redirect()->route('admin.devices.index')->with('success', 'Dispositivo atualizado');
+    }
+
+    // Listagem completa de respostas textuais de perguntas não numéricas
+    public function respostasTextuaisIndex()
+    {
+        if (!Auth::check()) {
+            return redirect()->route('admin.login');
+        }
+
+        $avaliacoesTextuais = Avaliacao::with(['pergunta','setor','dispositivo'])
+            ->whereNotNull('feedback_textual')
+            ->whereHas('pergunta', fn($q) => $q->where('resposta_numerica', false))
+            ->orderBy('data','desc')
+            ->paginate(25);
+
+        return view('admin.questions.textual_respostas', [
+            'avaliacoesTextuais' => $avaliacoesTextuais,
+        ]);
     }
 }

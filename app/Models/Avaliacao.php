@@ -20,7 +20,10 @@ class Avaliacao extends Model
 
     protected $fillable = ['id', 'setor_id', 'pergunta_id', 'dispositivo_id', 'resposta', 'feedback_textual', 'data'];
 
-    protected $dates = ['data'];
+    
+    protected $casts = [
+        'data' => 'datetime',
+    ];
 
     public function pergunta()
     {

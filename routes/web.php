@@ -35,6 +35,7 @@ Route::prefix('admin')->name('admin.')->group(function() {
         Route::post('/questions', [AdministradorController::class, 'questionsStore'])->name('questions.store');
         Route::get('/questions/{id}/edit', [AdministradorController::class, 'questionsEdit'])->name('questions.edit');
         Route::put('/questions/{id}', [AdministradorController::class, 'questionsUpdate'])->name('questions.update');
+        Route::get('/respostas-textuais', [AdministradorController::class, 'respostasTextuaisIndex'])->name('respostas.textuais.index');
 
         // Devices CRUD
         Route::get('/devices', [AdministradorController::class, 'devicesIndex'])->name('devices.index');
