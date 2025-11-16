@@ -31,12 +31,7 @@
           <td>{{ $d->nome }}</td>
           <td>{{ $d->status ? 'Ativo' : 'Inativo' }}</td>
           <td>
-            <a href="{{ route('admin.devices.edit', $d->id) }}">Editar</a> |
-            <form action="{{ route('admin.devices.destroy', $d->id) }}" method="POST" style="display:inline" onsubmit="return confirm('Excluir este dispositivo? As avaliações vinculadas serão removidas.');">
-              @csrf
-              @method('DELETE')
-              <button type="submit" style="background:none;border:none;color:#b00;cursor:pointer;padding:0">Excluir</button>
-            </form>
+            <a href="{{ route('admin.devices.edit', $d->id) }}">Editar</a>
           </td>
         </tr>
       @endforeach

@@ -146,16 +146,6 @@ class AdministradorController extends Controller
         return redirect()->route('admin.questions.index')->with('success', 'Pergunta atualizada');
     }
 
-    public function questionsDestroy(Request $request, string $id)
-    {
-        if (!Auth::check()) {
-            return redirect()->route('admin.login');
-        }
-        $pergunta = Pergunta::findOrFail($id);
-        $pergunta->delete();
-        return redirect()->route('admin.questions.index')->with('success', 'Pergunta excluída');
-    }
-
     // Dispositivos CRUD
     public function devicesIndex()
     {
@@ -215,15 +205,5 @@ class AdministradorController extends Controller
             'status' => (bool)($data['status'] ?? false),
         ]);
         return redirect()->route('admin.devices.index')->with('success', 'Dispositivo atualizado');
-    }
-
-    public function devicesDestroy(Request $request, string $id)
-    {
-        if (!Auth::check()) {
-            return redirect()->route('admin.login');
-        }
-        $device = Dispositivo::findOrFail($id);
-        $device->delete();
-        return redirect()->route('admin.devices.index')->with('success', 'Dispositivo excluído');
     }
 }

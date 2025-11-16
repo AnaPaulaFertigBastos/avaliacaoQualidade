@@ -34,12 +34,6 @@
           <td>{{ $q->status ? 'Ativo' : 'Inativo' }}</td>
           <td>
             <a href="{{ route('admin.questions.edit', $q->id) }}">Editar</a>
-            |
-            <form action="{{ route('admin.questions.destroy', $q->id) }}" method="POST" style="display:inline" onsubmit="return confirm('Excluir esta pergunta? Esta ação não pode ser desfeita.');">
-              @csrf
-              @method('DELETE')
-              <button type="submit" style="background:none;border:none;color:#b00;cursor:pointer;padding:0">Excluir</button>
-            </form>
           </td>
         </tr>
       @endforeach
