@@ -1,34 +1,157 @@
+
+:root{
+  /* Neutral elegant palette (teal, sage, gold) */
+  --cor-fundo-gradiente:linear-gradient(140deg,#f2f5f7 0%, #f7f8f6 55%, #f4f6f3 100%);
+  --cor-texto:#2f3437;
+  --cor-primaria:#2d6a7b; /* deep teal */
+  --cor-primaria-rgb:45,106,123;
+  --cor-primaria-escura:#1f4a56;
+  --cor-secundaria:#5c7d6b; /* sage */
+  --cor-acento:#d4a44f; /* soft gold */
+  --cor-card:#ffffff;
+  --cor-borda:#d9e2e6;
+  --cor-hover:#eef4f5;
+  --sombra-card:0 6px 18px rgba(25,45,55,.12);
+  --radius:14px;
+  --transicao:160ms ease-in-out;
+}
+
 body{
-  font-family:Arial,Helvetica,sans-serif;
-  background:#f5f7fa
+  font-family:'Poppins',Arial,Helvetica,sans-serif;
+  background:var(--cor-fundo-gradiente);
+  color:var(--cor-texto);
+  -webkit-font-smoothing:antialiased;
+  margin:0;
 }
 
-.table thead th{
-  white-space:nowrap
+h1,h2,h3,h4,h5{
+  font-weight:600;
+  letter-spacing:.5px;
 }
 
+/* Navbar */
+.theme-navbar{
+  background:linear-gradient(120deg,var(--cor-primaria) 0%, var(--cor-secundaria) 75%);
+  box-shadow:0 4px 14px rgba(25,45,55,.25);
+  border-bottom:3px solid rgba(var(--cor-primaria-rgb),.30);
+}
+.theme-navbar .navbar-brand{
+  font-weight:600;
+  color:#fff;
+}
+.theme-navbar .nav-link{
+  position:relative;
+  color:#ffe9f5;
+  font-weight:500;
+  transition:var(--transicao);
+}
+.theme-navbar .nav-link:hover{color:#ffffff;}
+.theme-navbar .nav-link.active{
+  color:#fff;
+}
+.theme-navbar .nav-link.active::after{
+  content:"";
+  position:absolute;
+  left:18%;right:18%;bottom:6px;
+  height:4px;
+  border-radius:4px;
+  background:var(--cor-acento);
+  box-shadow:0 0 0 4px rgba(212,164,79,.25);
+}
+
+/* Cards */
 .card{
-  background:#fff;
-  border-radius:.5rem;
-  padding:1.25rem;
+  background:var(--cor-card);
+  border:1px solid var(--cor-borda);
+  border-radius:var(--radius);
+  padding:1.25rem 1.35rem;
   margin-bottom:1.5rem;
-  box-shadow:0 1px 2px rgba(0,0,0,.1)
+  box-shadow:var(--sombra-card);
+  backdrop-filter:blur(4px);
 }
 
+/* Tables */
+.table thead th{
+  white-space:nowrap;
+  background:linear-gradient(90deg,#edf2f4,#f1f6f3);
+  border-bottom:2px solid var(--cor-borda);
+  font-weight:600;
+  color:#2d4b55;
+}
+.table tbody tr:hover{
+  background:var(--cor-hover);
+  transition:var(--transicao);
+}
+
+/* Buttons */
+.btn-primary{
+  background:linear-gradient(135deg,var(--cor-primaria) 0%, var(--cor-primaria-escura) 100%);
+  border-color:var(--cor-primaria-escura);
+  box-shadow:0 3px 10px rgba(var(--cor-primaria-rgb),.35);
+}
+.btn-primary:hover{
+  filter:brightness(1.07);
+  box-shadow:0 4px 14px rgba(var(--cor-primaria-rgb),.45);
+}
+.btn-outline-secondary{
+  color:var(--cor-secundaria);
+  border-color:var(--cor-secundaria);
+  background:rgba(92,125,107,.08);
+}
+.btn-outline-secondary:hover{
+  background:var(--cor-secundaria);
+  color:#fff;
+  box-shadow:0 3px 10px rgba(92,125,107,.35);
+}
+.btn-outline-light{border-color:#ffe9f5;}
+.btn-outline-light:hover{background:#ffe9f5;color:var(--cor-primaria);}
+
+/* Badges */
+.badge.bg-success{background:var(--cor-primaria)!important;}
+.badge.bg-secondary{background:var(--cor-secundaria)!important;}
+.badge{padding:.45em .65em;font-weight:500;letter-spacing:.3px;}
+
+/* Forms */
+textarea, input[type=text], input[type=number]{
+  width:100%;
+  box-sizing:border-box;
+  border:1px solid var(--cor-borda);
+  border-radius:8px;
+  padding:.6rem .75rem;
+  background:#fff;
+  transition:var(--transicao);
+}
+textarea:focus, input[type=text]:focus, input[type=number]:focus{
+  outline:none;
+  border-color:var(--cor-secundaria);
+  box-shadow:0 0 0 3px rgba(92,125,107,.30);
+}
+
+/* Charts */
 .chart-canvas{
   max-width:900px;
   width:100%;
   height:320px;
-  margin-bottom:24px
+  margin-bottom:24px;
 }
 
-textarea, input[type=text], input[type=number]{
-  width:100%;
-  box-sizing:border-box
-}
-
+/* Utility */
 .actions{
   display:flex;
   gap:.75rem;
-  align-items:center
+  align-items:center;
 }
+
+/* Auth specific tweaks */
+.card h5,.card h2{letter-spacing:.4px;}
+.alert-danger{border-radius:10px;}
+
+/* Subtle page fade-in */
+main.container{animation:fadeIn .5s ease forwards; opacity:0;}
+@keyframes fadeIn{to{opacity:1;}}
+
+/* Scrollbar (Webkit) */
+body::-webkit-scrollbar{width:10px;}
+body::-webkit-scrollbar-track{background:#fdeff7;}
+body::-webkit-scrollbar-thumb{background:var(--cor-primaria);border-radius:20px;border:2px solid #fdeff7;}
+body::-webkit-scrollbar-thumb:hover{background:var(--cor-primaria-escura);}
