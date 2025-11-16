@@ -35,6 +35,14 @@ Route::prefix('admin')->name('admin.')->group(function() {
         Route::get('/questions/{id}/edit', [AdministradorController::class, 'questionsEdit'])->name('questions.edit');
         Route::put('/questions/{id}', [AdministradorController::class, 'questionsUpdate'])->name('questions.update');
         Route::delete('/questions/{id}', [AdministradorController::class, 'questionsDestroy'])->name('questions.destroy');
+
+        // Devices CRUD
+        Route::get('/devices', [AdministradorController::class, 'devicesIndex'])->name('devices.index');
+        Route::get('/devices/create', [AdministradorController::class, 'devicesCreate'])->name('devices.create');
+        Route::post('/devices', [AdministradorController::class, 'devicesStore'])->name('devices.store');
+        Route::get('/devices/{id}/edit', [AdministradorController::class, 'devicesEdit'])->name('devices.edit');
+        Route::put('/devices/{id}', [AdministradorController::class, 'devicesUpdate'])->name('devices.update');
+        Route::delete('/devices/{id}', [AdministradorController::class, 'devicesDestroy'])->name('devices.destroy');
     });
 });
 

@@ -11,6 +11,7 @@
     <h1>Painel Administrativo</h1>
     <p>
       <a href="{{ route('admin.questions.index') }}">Gerenciar Perguntas</a> |
+      <a href="{{ route('admin.devices.index') }}">Gerenciar Dispositivos</a> |
       <form action="{{ route('admin.logout') }}" method="POST" style="display:inline">
         @csrf
         <button type="submit" style="background:none;border:none;color:#06c;cursor:pointer;padding:0">Sair</button>

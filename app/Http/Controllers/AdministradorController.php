@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Pergunta;
 use App\Models\Avaliacao;
+use App\Models\Dispositivo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -134,5 +135,76 @@ class AdministradorController extends Controller
         $pergunta = Pergunta::findOrFail($id);
         $pergunta->delete();
         return redirect()->route('admin.questions.index')->with('success', 'Pergunta excluída');
+    }
+
+    // Dispositivos CRUD
+    public function devicesIndex()
+    {
+        if (!Auth::check()) {
+            return redirect()->route('admin.login');
+        }
+        $devices = Dispositivo::all();
+        return view('admin.devices.index', compact('devices'));
+    }
+
+    public function devicesCreate()
+    {
+        if (!Auth::check()) {
+            return redirect()->route('admin.login');
+        }
+        return view('admin.devices.create');
+    }
+
+    public function devicesStore(Request $request)
+    {
+        if (!Auth::check()) {
+            return redirect()->route('admin.login');
+        }
+        $data = $request->validate([
+            'nome' => 'required|string|max:255',
+            'status' => 'nullable|boolean',
+        ]);
+        Dispositivo::create([
+            'id' => Str::uuid()->toString(),
+            'nome' => $data['nome'],
+            'status' => (bool)($data['status'] ?? true),
+        ]);
+        return redirect()->route('admin.devices.index')->with('success', 'Dispositivo criado');
+    }
+
+    public function devicesEdit(string $id)
+    {
+        if (!Auth::check()) {
+            return redirect()->route('admin.login');
+        }
+        $device = Dispositivo::findOrFail($id);
+        return view('admin.devices.edit', compact('device'));
+    }
+
+    public function devicesUpdate(Request $request, string $id)
+    {
+        if (!Auth::check()) {
+            return redirect()->route('admin.login');
+        }
+        $device = Dispositivo::findOrFail($id);
+        $data = $request->validate([
+            'nome' => 'required|string|max:255',
+            'status' => 'nullable|boolean',
+        ]);
+        $device->update([
+            'nome' => $data['nome'],
+            'status' => (bool)($data['status'] ?? false),
+        ]);
+        return redirect()->route('admin.devices.index')->with('success', 'Dispositivo atualizado');
+    }
+
+    public function devicesDestroy(Request $request, string $id)
+    {
+        if (!Auth::check()) {
+            return redirect()->route('admin.login');
+        }
+        $device = Dispositivo::findOrFail($id);
+        $device->delete();
+        return redirect()->route('admin.devices.index')->with('success', 'Dispositivo excluído');
     }
 }
