@@ -36,17 +36,18 @@ Copy-Item .env.example .env
 Edite `.env` e ajuste (exemplo usando PostgreSQL local com DB `avaliacoessistema`):
 
 ```
-APP_NAME="AvaliacaoQualidade"
+APP_NAME=Laravel
 APP_ENV=local
+APP_KEY=
 APP_DEBUG=true
-APP_URL=http://127.0.0.1:8000
+APP_URL=http://localhost
 
 DB_CONNECTION=pgsql
 DB_HOST=127.0.0.1
 DB_PORT=5432
 DB_DATABASE=avaliacoessistema
 DB_USERNAME=postgres
-DB_PASSWORD=postgres
+DB_PASSWORD=senha
 ```
 
 3) Crie o banco de dados `avaliacoessistema` no PostgreSQL (via pgAdmin ou SQL):
@@ -126,32 +127,6 @@ php artisan optimize:clear
 
 - Conexão com banco falhou: confirme host/porta/usuário/senha no `.env` e se o DB `avaliacoessistema` existe.
 - Erros de migração: use `php artisan migrate:fresh` em ambiente local para recriar as tabelas.
-
-
-
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
 ## License
 
