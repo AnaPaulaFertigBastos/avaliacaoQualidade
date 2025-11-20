@@ -21,6 +21,15 @@ Route::get('/avaliacao/questions/{setorId?}/{dispositivoId?}', [AvaliacaoControl
 Route::post('/evaluate', [AvaliacaoController::class, 'salvar'])->name('avaliacao.salvar');
 
 Route::prefix('admin')->name('admin.')->group(function() {
+    
+    Route::get('/', function () {
+        if (auth()->check()) {
+            return redirect()->route('admin.dashboard');
+        }
+
+        return redirect()->route('admin.login');
+    });
+
     // Login público
     Route::get('/login', [AdministradorController::class, 'showLogin'])->name('login');
     Route::post('/login', [AdministradorController::class, 'login'])->name('login.post');
@@ -46,5 +55,22 @@ Route::prefix('admin')->name('admin.')->group(function() {
         Route::get('/devices/{id}/edit', [AdministradorController::class, 'devicesEdit'])->name('devices.edit');
         Route::put('/devices/{id}', [AdministradorController::class, 'devicesUpdate'])->name('devices.update');
     });
+
+    // Admin-specific fallback: if an admin-prefixed route doesn't exist,
+    // send the user to the admin login page (or dashboard if already logged in).
+    Route::fallback(function () {
+        if (auth()->check()) {
+            return redirect()->route('admin.dashboard');
+        }
+
+        return redirect()->route('admin.login');
+    });
+});
+
+
+// Global fallback: when any non-defined route is requested, redirect to the public
+// evaluation form so users always land on the evaluation page instead of a 404.
+Route::fallback(function () {
+    return redirect()->route('avaliacao.form');
 });
 
