@@ -18,10 +18,24 @@
           </tr>
         </thead>
         <tbody>
+          @php($minOrder = $questions->min('ordem'))
+          @php($maxOrder = $questions->max('ordem'))
           @foreach($questions as $q)
             <tr>
               <td>{{ $q->texto }}</td>
-              <td>{{ $q->order }}</td>
+              <td class="text-center">
+                <div class="d-flex align-items-center justify-content-center questions-order-controls">
+                  <form method="POST" action="{{ route('admin.questions.up', $q->id) }}">
+                    @csrf
+                    <button type="submit" class="btn btn-sm order-btn" {{ $q->ordem == $minOrder ? 'disabled' : '' }} title="Mover para cima">↑</button>
+                  </form>
+                  <span class="order-number fw-semibold">{{ $q->ordem }}</span>
+                  <form method="POST" action="{{ route('admin.questions.down', $q->id) }}">
+                    @csrf
+                    <button type="submit" class="btn btn-sm order-btn" {{ $q->ordem == $maxOrder ? 'disabled' : '' }} title="Mover para baixo">↓</button>
+                  </form>
+                </div>
+              </td>
               <td><span class="badge {{ $q->status ? 'bg-success' : 'bg-secondary' }}">{{ $q->status ? 'Ativo' : 'Inativo' }}</span></td>
               <td><a class="btn btn-outline-secondary btn-sm" href="{{ route('admin.questions.edit', $q->id) }}">Editar</a></td>
             </tr>

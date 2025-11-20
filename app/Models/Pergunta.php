@@ -13,7 +13,7 @@ class Pergunta extends Model
     protected $keyType = 'string';
     public $timestamps = false;
 
-    protected $fillable = ['id', 'texto', 'status', 'resposta_numerica'];
+    protected $fillable = ['id', 'texto', 'status', 'resposta_numerica', 'ordem'];
 
     public function avaliacoes()
     {

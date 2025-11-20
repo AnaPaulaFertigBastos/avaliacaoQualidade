@@ -31,6 +31,7 @@ return new class extends Migration
             $table->text('texto');
             $table->boolean('status')->default(true);
             $table->boolean('resposta_numerica')->default(true);
+            $table->unsignedInteger('ordem')->default(0); // ordem de exibição
         });
 
         // avaliacoes

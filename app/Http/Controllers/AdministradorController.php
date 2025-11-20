@@ -47,7 +47,7 @@ class AdministradorController extends Controller
             return redirect()->route('admin.login');
         }
 
-        $questions = Pergunta::all();
+        $questions = Pergunta::orderBy('ordem')->get();
         $setores = \App\Models\Setor::all();
         $stats = [];
         foreach ($questions as $q) {
@@ -132,7 +132,7 @@ class AdministradorController extends Controller
         if (!Auth::check()) {
             return redirect()->route('admin.login');
         }
-        $questions = Pergunta::all();
+        $questions = Pergunta::orderBy('ordem')->get();
         return view('admin.questions.index', compact('questions'));
     }
 
@@ -156,11 +156,13 @@ class AdministradorController extends Controller
             'resposta_numerica' => 'nullable|boolean',
         ]);
 
+        $nextOrder = (int) Pergunta::max('ordem') + 1;
         Pergunta::create([
             'id' => Str::uuid()->toString(),
             'texto' => $data['texto'],
             'status' => (bool)($data['status'] ?? true),
             'resposta_numerica' => (bool)($data['resposta_numerica'] ?? true),
+            'ordem' => $nextOrder,
         ]);
 
         return redirect()->route('admin.questions.index')->with('success', 'Pergunta criada');
@@ -274,5 +276,41 @@ class AdministradorController extends Controller
         return view('admin.questions.textual_respostas', [
             'avaliacoesTextuais' => $avaliacoesTextuais,
         ]);
+    }
+
+    public function questionsMoveUp(string $id)
+    {
+        if (!Auth::check()) {
+            return redirect()->route('admin.login');
+        }
+        $current = Pergunta::findOrFail($id);
+        $above = Pergunta::where('ordem', '<', $current->ordem)->orderBy('ordem', 'desc')->first();
+        if (!$above) {
+            return redirect()->route('admin.questions.index')->with('success', 'Já está no topo');
+        }
+        \DB::transaction(function() use ($current, $above) {
+            $tmp = $current->ordem;
+            $current->update(['ordem' => $above->ordem]);
+            $above->update(['ordem' => $tmp]);
+        });
+        return redirect()->route('admin.questions.index')->with('success', 'Ordem atualizada');
+    }
+
+    public function questionsMoveDown(string $id)
+    {
+        if (!Auth::check()) {
+            return redirect()->route('admin.login');
+        }
+        $current = Pergunta::findOrFail($id);
+        $below = Pergunta::where('ordem', '>', $current->ordem)->orderBy('ordem', 'asc')->first();
+        if (!$below) {
+            return redirect()->route('admin.questions.index')->with('success', 'Já está na última posição');
+        }
+        \DB::transaction(function() use ($current, $below) {
+            $tmp = $current->ordem;
+            $current->update(['ordem' => $below->ordem]);
+            $below->update(['ordem' => $tmp]);
+        });
+        return redirect()->route('admin.questions.index')->with('success', 'Ordem atualizada');
     }
 }

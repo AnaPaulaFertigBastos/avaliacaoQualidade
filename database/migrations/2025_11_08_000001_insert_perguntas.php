@@ -11,12 +11,12 @@ return new class extends Migration
         $now = now();
 
         DB::table('perguntas')->insert([
-            ['id' => Str::uuid()->toString(), 'texto' => 'Como você avalia o atendimento recebido?', 'status' => true, 'resposta_numerica' => true],
-            ['id' => Str::uuid()->toString(), 'texto' => 'O tempo de espera para ser atendido foi satisfatório?', 'status' => true, 'resposta_numerica' => true],
-            ['id' => Str::uuid()->toString(), 'texto' => 'O funcionário demonstrou cordialidade e profissionalismo?', 'status' => true, 'resposta_numerica' => true],
-            ['id' => Str::uuid()->toString(), 'texto' => 'O ambiente estava limpo e organizado?', 'status' => true, 'resposta_numerica' => true],
-            ['id' => Str::uuid()->toString(), 'texto' => 'Você recomendaria nossos serviços a outras pessoas?', 'status' => true, 'resposta_numerica' => true],
-            ['id' => Str::uuid()->toString(), 'texto' => 'Deixe aqui seu feedback adicional (opcional):', 'status' => true, 'resposta_numerica' => false],
+            ['id' => Str::uuid()->toString(), 'texto' => 'Como você avalia o atendimento recebido?', 'status' => true, 'resposta_numerica' => true, 'ordem' => 1],
+            ['id' => Str::uuid()->toString(), 'texto' => 'O tempo de espera para ser atendido foi satisfatório?', 'status' => true, 'resposta_numerica' => true, 'ordem' => 2],
+            ['id' => Str::uuid()->toString(), 'texto' => 'O funcionário demonstrou cordialidade e profissionalismo?', 'status' => true, 'resposta_numerica' => true, 'ordem' => 3],
+            ['id' => Str::uuid()->toString(), 'texto' => 'O ambiente estava limpo e organizado?', 'status' => true, 'resposta_numerica' => true, 'ordem' => 4],
+            ['id' => Str::uuid()->toString(), 'texto' => 'Você recomendaria nossos serviços a outras pessoas?', 'status' => true, 'resposta_numerica' => true, 'ordem' => 5],
+            ['id' => Str::uuid()->toString(), 'texto' => 'Deixe aqui seu feedback adicional (opcional):', 'status' => true, 'resposta_numerica' => false, 'ordem' => 6],
         ]);
     }
 

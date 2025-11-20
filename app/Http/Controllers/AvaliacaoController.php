@@ -16,7 +16,7 @@ class AvaliacaoController extends Controller
     // mostra o formulário público (home)
     public function index($setorId = null, $dispositivoId = null)
     {
-        $questions = Pergunta::where('status', true)->get();
+        $questions = Pergunta::where('status', true)->orderBy('ordem')->get();
         $devices = Dispositivo::where('status', true)->get();
 
         $selectedDeviceId = null;
@@ -166,7 +166,7 @@ class AvaliacaoController extends Controller
 
     public function perguntasJson($setorId = null, $dispositivoId = null)
     {
-        $questions = Pergunta::where('status', true)->get(['id', 'texto', 'resposta_numerica']);
+        $questions = Pergunta::where('status', true)->orderBy('ordem')->get(['id', 'texto', 'resposta_numerica']);
 
         return response()->json($questions);
     }
