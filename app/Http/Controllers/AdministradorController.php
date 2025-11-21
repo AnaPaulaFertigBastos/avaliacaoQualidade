@@ -209,6 +209,17 @@ class AdministradorController extends Controller
         return view('admin.devices.index', compact('devices'));
     }
 
+    // Listagem de setores para o admin (id, descricao, ativo)
+    public function setoresIndex()
+    {
+        if (!Auth::check()) {
+            return redirect()->route('admin.login');
+        }
+
+        $setores = \App\Models\Setor::orderBy('descricao')->get();
+        return view('admin.setores.index', compact('setores'));
+    }
+
     public function devicesCreate()
     {
         if (!Auth::check()) {

@@ -11,6 +11,7 @@
       <table class="table table-bordered table-striped table-sm align-middle mb-0">
         <thead class="table-light">
           <tr>
+            <th style="min-width:360px">ID</th>
             <th>Nome</th>
             <th>Status</th>
             <th>Ações</th>
@@ -19,6 +20,7 @@
         <tbody>
           @foreach($devices as $d)
             <tr>
+              <td><code class="small">{{ $d->id }}</code></td>
               <td>{{ $d->nome }}</td>
               <td><span class="badge {{ $d->status ? 'bg-success' : 'bg-secondary' }}">{{ $d->status ? 'Ativo' : 'Inativo' }}</span></td>
               <td><a class="btn btn-outline-secondary btn-sm" href="{{ route('admin.devices.edit', $d->id) }}">Editar</a></td>

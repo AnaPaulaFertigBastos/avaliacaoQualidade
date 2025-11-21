@@ -24,8 +24,12 @@
             <li class="nav-item">
               <a class="nav-link {{ Route::is('admin.questions.*') ? 'active' : '' }}" href="{{ route('admin.questions.index') }}">Perguntas</a>
             </li>
+            
             <li class="nav-item">
               <a class="nav-link {{ Route::is('admin.devices.*') ? 'active' : '' }}" href="{{ route('admin.devices.index') }}">Dispositivos</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {{ Route::is('admin.setores.*') ? 'active' : '' }}" href="{{ route('admin.setores.index') }}">Setores</a>
             </li>
           </ul>
           <form class="d-flex" action="{{ route('admin.logout') }}" method="POST">

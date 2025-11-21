@@ -54,6 +54,8 @@ Route::prefix('admin')->name('admin.')->group(function() {
         Route::post('/devices', [AdministradorController::class, 'devicesStore'])->name('devices.store');
         Route::get('/devices/{id}/edit', [AdministradorController::class, 'devicesEdit'])->name('devices.edit');
         Route::put('/devices/{id}', [AdministradorController::class, 'devicesUpdate'])->name('devices.update');
+        // Setores listing for admin
+        Route::get('/setores', [AdministradorController::class, 'setoresIndex'])->name('setores.index');
     });
 
     // Admin-specific fallback: if an admin-prefixed route doesn't exist,
