@@ -33,7 +33,7 @@ composer install
 Copy-Item .env.example .env
 ```
 
-Edite `.env` e ajuste (exemplo usando PostgreSQL local com DB `avaliacoessistema`):
+Edite `.env` (existe o `.env.example` para copiar e colar) e ajuste (exemplo usando PostgreSQL local com DB `avaliacoessistema`):
 
 ```
 APP_NAME=Laravel
@@ -84,23 +84,19 @@ Abra em: `http://127.0.0.1:8000`
 
 ### Usando a avaliação pública
 - A rota pública aceita parâmetros de rota: `/avaliacao/{setorId?}/{dispositivoId?}`
-- Para testar rapidamente, recupere um `setorId` e `dispositivoId` existentes:
+- Para testar rapidamente, recupere um `setorId` e `dispositivoId` existentes, como esses, já cadastrados:
 
-```powershell
-php artisan tinker
-```
+http://127.0.0.1:8000/avaliacao/8a1b2c3d-1e2f-4a3b-9c4d-7e8f90123456/d1e2f3a4-6b7c-4f9a-8b1c-234567890cde
 
-No Tinker:
 
-```php
->>> \App\Models\Setor::first()->id;
->>> \App\Models\Dispositivo::first()->id;
-```
 
-Depois acesse no navegador:
+
+Ou outro setorId e dispositivoId existentes:
 
 ```
 http://127.0.0.1:8000/avaliacao/<setorId>/<dispositivoId>
+
+
 ```
 
 As perguntas são carregadas por AJAX e o formulário envia as respostas para o backend.
@@ -131,3 +127,16 @@ php artisan optimize:clear
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## Admin — Como usar a rota `admin`
+
+Esta seção descreve as rotas principais do painel de administração (`/admin`) e como usá-las em desenvolvimento.
+
+- **GET `/admin/login`** — mostra o formulário de login do admin. (Nome da rota: `admin.login`).
+- **POST `/admin/login`** — envia credenciais e autentica (Nome da rota: `admin.login.post`).
+- **POST `/admin/logout`** — encerra a sessão do admin (Nome da rota: `admin.logout`).
+- **GET `/admin/` ou `/admin/dashboard`** — painel do admin (Nome da rota: `admin.dashboard`) — protegido por `auth`.
+
+Como usar na prática
+- Acesse no navegador `http://127.0.0.1:8000/admin/login` — você será levado ao login ou ao dashboard conforme estiver autenticado.
+```
